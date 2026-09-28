@@ -74,7 +74,18 @@ class Control_unit {
 			this.instruction_i = this.decoded_instruction[2]
 
 			this.instruction_r2 = null
-		}else {
+		} else if(this.instruction_operation == instruction_set.PUSH){
+			this.instruction_r1 = this.decoded_instruction[1]
+			this.instruction_i = register.sp
+
+			this.instruction_r2 = null
+		} else if(this.instruction_operation == instruction_set.POP){
+			this.instruction_r1 = this.decoded_instruction[1]
+			this.instruction_i = register.sp
+
+			this.instruction_r2 = null
+		}
+		else {
 			this.instruction_r1 = this.decoded_instruction[1]
 			this.instruction_r2 = this.decoded_instruction[2]
 
@@ -107,7 +118,7 @@ class Control_unit {
 		}
 
 		if (this.instruction_operation == instruction_set.STORE){
-			if (this.instruction_i >= 0 && this.instruction_i <= 255){
+			if (this.instruction_i >= 0 && this.instruction_i < 200){
 				console.log(this.program_counter)
 				console.log("memory old value: " + dataMemory[this.instruction_i])
 				dataMemory[this.instruction_i] = register[this.instruction_r1]
@@ -117,10 +128,32 @@ class Control_unit {
 		}
 
 		if (this.instruction_operation == instruction_set.LOAD){
-			if (this.instruction_i >= 0 && this.instruction_i <= 255){
+			if (this.instruction_i >= 0 && this.instruction_i < 200){
 				console.log(this.program_counter)
 				console.log("register old value: " + register[this.instruction_r1])
 				register[this.instruction_r1] = dataMemory[this.instruction_i]
+				console.log("register new value: " + register[this.instruction_r1])
+			}
+			return
+		}
+
+		if (this.instruction_operation == instruction_set.PUSH){
+			if (this.instruction_i >= 200 && this.instruction_i < 256){
+				console.log(this.program_counter)
+				console.log("dataMemory old value: " + dataMemory[this.instruction_i])
+				dataMemory[this.instruction_i] = register[this.instruction_r1]
+				register.sp++
+				console.log("dataMemory new value: " + dataMemory[this.instruction_i])
+			}
+			return
+		}
+
+		if (this.instruction_operation == instruction_set.POP){
+			if (this.instruction_i >= 200 && this.instruction_i < 256){
+				console.log(this.program_counter)
+				console.log("register old value: " + register[this.instruction_r1])
+				register[this.instruction_r1] = dataMemory[this.instruction_i - 1]
+				register.sp--
 				console.log("register new value: " + register[this.instruction_r1])
 			}
 			return

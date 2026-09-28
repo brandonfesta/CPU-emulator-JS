@@ -8,6 +8,8 @@ export let instruction_set = {
 	"JUMP_IF_ZERO": "JUMP_IF_ZERO",
 	"JUMP_IF_NOT_ZERO": "JUMP_IF_NOT_ZERO",
 	"LOAD": "LOAD",
-	"STORE": "STORE"
+	"STORE": "STORE",
+	"PUSH": "PUSH",
+	"POP": "POP"
 	// more to come
 };
