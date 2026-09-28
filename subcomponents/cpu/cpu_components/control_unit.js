@@ -17,10 +17,10 @@ class Control_unit {
 
 	instruction_cycle(){
 		this.fetch()
-		this.program_counter += 1
 		if (this.instruction_register == null){
 			return
 		}
+		this.program_counter += 1
 		this.decode()
 		this.execute()
 
@@ -76,13 +76,13 @@ class Control_unit {
 			this.instruction_r2 = null
 		} else if(this.instruction_operation == instruction_set.PUSH){
 			this.instruction_r1 = this.decoded_instruction[1]
-			this.instruction_i = register.sp
 
+			this.instruction_i = null
 			this.instruction_r2 = null
 		} else if(this.instruction_operation == instruction_set.POP){
 			this.instruction_r1 = this.decoded_instruction[1]
-			this.instruction_i = register.sp
 
+			this.instruction_i = null
 			this.instruction_r2 = null
 		} else if (this.instruction_operation == instruction_set.CALL){
 			this.instruction_i = this.decoded_instruction[1]
@@ -148,20 +148,20 @@ class Control_unit {
 		}
 
 		if (this.instruction_operation == instruction_set.PUSH){
-			if (this.instruction_i >= 200 && this.instruction_i < 256){
-				console.log("dataMemory old value: " + dataMemory[this.instruction_i])
+			if (register.sp >= 200 && register.sp < 256){
+				console.log("dataMemory old value: " + dataMemory[register.sp])
 				register.sp++
-				dataMemory[this.instruction_i] = register[this.instruction_r1]
-				console.log("dataMemory new value: " + dataMemory[this.instruction_i])
+				dataMemory[register.sp] = register[this.instruction_r1]
+				console.log("dataMemory new value: " + dataMemory[register.sp])
 			}
 			return
 		}
 
 		if (this.instruction_operation == instruction_set.POP){
-			if (this.instruction_i >= 200 && this.instruction_i <= 256){
+			if (register.sp >= 200 && register.sp <= 256){
 				console.log("register old value: " + register[this.instruction_r1])
+				register[this.instruction_r1] = dataMemory[register.sp]
 				register.sp--
-				register[this.instruction_r1] = dataMemory[this.instruction_i - 1]
 				console.log("register new value: " + register[this.instruction_r1])
 			}
 			return
@@ -171,9 +171,9 @@ class Control_unit {
 			if (register.sp >= 200 && register.sp < 256){
 				
 				console.log("old program counter: " + this.program_counter)
+				register.sp++
 				dataMemory[register.sp] = this.program_counter
 				this.program_counter = Number(this.instruction_i)
-				register.sp++
 				console.log("new program counter: " + this.program_counter)
 			}
 			return
@@ -182,8 +182,8 @@ class Control_unit {
 		if (this.instruction_operation == instruction_set.RET){
 			if (register.sp >= 200 && register.sp <= 256){
 				console.log("old program counter: " + this.program_counter)
-				register.sp--
 				this.program_counter = dataMemory[register.sp]
+				register.sp--
 				console.log("new program counter: " + this.program_counter)
 			}
 			return
