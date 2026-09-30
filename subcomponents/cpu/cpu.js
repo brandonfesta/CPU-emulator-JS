@@ -1,6 +1,6 @@
 import { control_unit } from "./cpu_components/control_unit.js";
 
-export const clock_rate = 100;
+export const clock_rate = 10;
 
 // for now no LSU
 setInterval(() => {

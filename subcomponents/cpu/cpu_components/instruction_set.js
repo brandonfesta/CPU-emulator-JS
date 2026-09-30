@@ -16,6 +16,9 @@ export let instruction_set = {
 	"PUSH": "PUSH",
 	"POP": "POP",
 	"CALL": "CALL",
-	"RET": "RET"
+	"RET": "RET",
+	// output instructions
+	"OUT": "OUT"
+
 	// more to come
 };

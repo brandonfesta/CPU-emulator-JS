@@ -96,6 +96,11 @@ class Control_unit {
 			this.instruction_i = null
 			this.instruction_r1 = null
 			this.instruction_r2 = null
+		} else if(this.instruction_operation == instruction_set.OUT){
+
+			this.instruction_i = null
+			this.instruction_r1 = null
+			this.instruction_r2 = null
 		}
 		else {
 			this.instruction_r1 = this.decoded_instruction[1]
@@ -109,8 +114,6 @@ class Control_unit {
 		if (this.instruction_register == null){
 			return
 		}
-
-		console.log(this.program_counter)
 
 		if (this.instruction_operation == instruction_set.JUMP){
 			this.program_counter = this.instruction_i
@@ -132,39 +135,31 @@ class Control_unit {
 		}
 
 		if (this.instruction_operation == instruction_set.STORE){
-			if (this.instruction_i >= 0 && this.instruction_i <= 198){
-				console.log("memory old value: " + dataMemory[this.instruction_i])
+			if (this.instruction_i >= 0 && this.instruction_i <= 196){
 				dataMemory[this.instruction_i] = register[this.instruction_r1]
-				console.log("memory new value: " + dataMemory[this.instruction_i])
 			}
 			return
 		}
 
 		if (this.instruction_operation == instruction_set.LOAD){
-			if (this.instruction_i >= 0 && this.instruction_i <= 198){
-				console.log("register old value: " + register[this.instruction_r1])
+			if (this.instruction_i >= 0 && this.instruction_i <= 196){
 				register[this.instruction_r1] = dataMemory[this.instruction_i]
-				console.log("register new value: " + register[this.instruction_r1])
 			}
 			return
 		}
 
 		if (this.instruction_operation == instruction_set.PUSH){
 			if (register.sp >= 199 && register.sp < 255){
-				console.log("dataMemory old value: " + dataMemory[register.sp])
 				register.sp++
 				dataMemory[register.sp] = register[this.instruction_r1]
-				console.log("dataMemory new value: " + dataMemory[register.sp])
 			}
 			return
 		}
 
 		if (this.instruction_operation == instruction_set.POP){
 			if (register.sp >= 199 && register.sp <= 255){
-				console.log("register old value: " + register[this.instruction_r1])
 				register[this.instruction_r1] = dataMemory[register.sp]
 				register.sp--
-				console.log("register new value: " + register[this.instruction_r1])
 			}
 			return
 		}
@@ -172,21 +167,26 @@ class Control_unit {
 		if (this.instruction_operation == instruction_set.CALL){
 			if (register.sp >= 200 && register.sp < 255){
 				
-				console.log("old program counter: " + this.program_counter)
 				register.sp++
 				dataMemory[register.sp] = this.program_counter
 				this.program_counter = Number(this.instruction_i)
-				console.log("new program counter: " + this.program_counter)
 			}
 			return
 		}
 
 		if (this.instruction_operation == instruction_set.RET){
 			if (register.sp >= 200 && register.sp <= 255){
-				console.log("old program counter: " + this.program_counter)
 				this.program_counter = dataMemory[register.sp]
 				register.sp--
-				console.log("new program counter: " + this.program_counter)
+			}
+			return
+		}
+
+		if (this.instruction_operation == instruction_set.OUT){
+			if (output_register.DATA != null){
+				register.output_r = output_register.DATA
+				output_register.DATA = null
+				process.stdout.write(register.output_r);
 			}
 			return
 		}
@@ -196,8 +196,6 @@ class Control_unit {
 		new_alu.execute()
 		register[this.instruction_r1] = new_alu.result
 
-		console.log(`result: ${new_alu.result}`)
-		console.log("r1: " + register[this.instruction_r1] + ", r2: " + register[this.instruction_r2])
 	}
 
 	check_input(){
@@ -219,7 +217,6 @@ class Control_unit {
 			return
 		}
 
-		
 	}
 }
 

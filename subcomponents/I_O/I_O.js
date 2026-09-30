@@ -1,5 +1,7 @@
 import readline from "node:readline";
 
+import { dataMemory } from "../cpu/cpu_components/DataMemory.js";
+// import { output_r } from "../cpu/cpu_components/register.js";
 // import { clock_rate } from "../cpu/cpu.js";
 
 export let input_register = {
@@ -12,6 +14,7 @@ export let output_register = {
 }
 
 let keyboard_buffer = []
+// let output_buffer = []
 
 readline.emitKeypressEvents(process.stdin);
 
@@ -32,4 +35,9 @@ setInterval(() => {
 		input_register.STATUS = 1
 		input_register.DATA = keyboard_buffer.shift()
 	}
-}, 100)
+
+	if (dataMemory[198] != 0){
+		output_register.DATA = dataMemory[198]
+		dataMemory[198] = 0
+	}
+}, 10)
