@@ -5,5 +5,8 @@ export let register = {
 	"r4": 0,
 
 	// special registers
-	"sp": 200
+	"sp": 200,
+
+	// I/O
+	"input_r": null
 };
