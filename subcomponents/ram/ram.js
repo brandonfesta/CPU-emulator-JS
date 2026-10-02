@@ -1,4 +1,5 @@
 export let ram = [
-    "OUT output_r",
-    "JUMP 0"
+    "OS_OUT \"MyOs v1.0\"",
+    "OUT",
+    "JUMP 1"
 ]

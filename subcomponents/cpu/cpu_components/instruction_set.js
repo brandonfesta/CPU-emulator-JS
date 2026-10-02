@@ -18,7 +18,8 @@ export let instruction_set = {
 	"CALL": "CALL",
 	"RET": "RET",
 	// output instructions
-	"OUT": "OUT"
+	"OUT": "OUT",
+	"OS_OUT": "OS_OUT",
 
 	// more to come
 };
